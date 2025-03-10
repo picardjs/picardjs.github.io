@@ -37,10 +37,10 @@ const picard = initializePicard({
 The configuration is fully typed. For instance, to load the micro frontends from a micro frontend discovery service you can set the `feed` option:
 
 ```js
-import { initializePicard } from 'picard-js/node';
+import { initializePicard } from 'picard-js/client';
 
 const picard = initializePicard({
-  feed: 'https://feed.piral.cloud/api/v1/pilet/tractor-ssr-demo',
+  feed: 'https://feed.piral.cloud/api/v1/pilet/tractor-demo',
 });
 ```
 
@@ -55,11 +55,11 @@ The `feed` can be supplied as
 So, if you want to provide some custom headers when making the request to the micro frontends discovery service you should implement a function:
 
 ```js
-import { initializePicard } from 'picard-js/node';
+import { initializePicard } from 'picard-js/client';
 
 const picard = initializePicard({
   feed: () =>
-    fetch('https://feed.piral.cloud/api/v1/pilet/tractor-ssr-demo', {
+    fetch('https://feed.piral.cloud/api/v1/pilet/tractor-demo', {
       headers: {
         // your custom headers here
       }
