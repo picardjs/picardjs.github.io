@@ -134,6 +134,10 @@ export default defineConfig({
           ],
         },
         {
+          text: "Usage",
+          items: [{ text: "Routing", link: "/api/usage/routing" }],
+        },
+        {
           text: "Service Endpoints",
           items: [{ text: "Fragment", link: "/api/endpoints/fragment" }],
         },
