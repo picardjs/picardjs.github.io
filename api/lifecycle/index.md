@@ -19,3 +19,5 @@ Hydration scenarios are covered via `mount` by looking either into `container` (
 (1) the `props` are the deserialized object from the `data` property
 
 (2) the `locals` is an (initially) empty object that can be used at will to transport information between the different lifecycle methods; it is created per component instance
+
+:point_right: See the [`pi-ssr-html`](https://github.com/picardjs/samples/tree/main/shared/pi-ssr-html) micro frontend of the samples for a minimal lifecycle with `stringify`, hydration, and `update`.

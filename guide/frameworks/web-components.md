@@ -37,6 +37,6 @@ Now you can use this web component in a `pi-component` as follows:
 ></pi-component>
 ```
 
-This will automatically create an HTML structure like `<my-component></my-component>`; working on the client, as well as on the server.
+This will automatically create an HTML structure like `<my-component></my-component>` on the client. Web components are not rendered on the server; mark them with `server="none"` in server-rendered pages.
 
-The incoming data will be spread as attributes into the component.
+The incoming data is set as attributes on the element. Objects are serialized as JSON, and functions are left empty. When the data changes, the attributes are updated.

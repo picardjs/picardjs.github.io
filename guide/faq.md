@@ -1,20 +1,32 @@
 # Frequently Asked Questions
 
-**What else is missing for now?**
+**Is Picard.js ready for production?**
 
-> Not much - Picard.js is close to being feature complete. Right now we are tuning the packaging, API, and some of the covered functionality such as what formats are supported.
-
-**When is Picard.js feature complete?**
-
-> Presumably end of July / start of August 2024.
-
-**When is Picard.js ready for production?**
-
-> In September 2024.
+> Picard.js is in an early preview: the 0.3 release is being finalized and published as pre-releases. Check the [changelog](https://github.com/picardjs/picard/blob/main/CHANGELOG.md) for the current state.
 
 **How does SSR work with web components?**
 
-> When the HTML is streamed out we'll look at the code and replace the configured web components with the rendering done by the referenced micro frontend(s).
+> On the server, the `decorate` function of `picard-js/node` looks at the HTML and renders the referenced components into the `pi-component` and `pi-slot` elements. In the browser, the islands script hydrates the server-rendered components and renders the others. See [Server-Side Rendering](./integrations/ssr.md).
+
+**Does Picard.js work with my framework?**
+
+> Very likely. Picard.js only uses custom elements, so any framework able to render HTML can use it. The [samples](./samples.md) cover Angular, React, Vue, Svelte, Solid, Qwik, Next.js, Nuxt, SvelteKit, React Router, SolidStart, Astro, Hugo, Hotwire Turbo, htmx, ASP.NET Core, Electron, Tauri, Capacitor, React Native, and more.
+
+**Do I need Node.js on the server for SSR?**
+
+> Picard.js needs a JavaScript runtime: Node.js, Bun, or Deno. Backends in other languages (e.g., .NET, Python, PHP) can call a small decorator service, and static site generators can run a decorator as a build step. See [Decorating Outside of JavaScript](./integrations/ssr.md#decorating-outside-of-javascript).
+
+**Why do Native Federation micro frontends not render on my Node.js server?**
+
+> Evaluating ES modules on the server requires `vm.SourceTextModule`. Start Node.js with `--experimental-vm-modules`, or use Bun or Deno, which support it without a flag.
+
+**Does Picard.js work under a strict Content Security Policy?**
+
+> Yes. The browser script can be configured via attributes, so no inline script is needed. Remote micro frontends need their origins allowed. Picard.js evaluates ES modules with shared dependencies via `blob:` scripts; without `blob:`, it imports modules without shared dependencies directly. A [browser extension sample](https://github.com/picardjs/samples/tree/main/extension/mv3) bundles everything locally.
+
+**Can I unit test pages using Picard.js?**
+
+> Yes, e.g., with Vitest in jsdom or happy-dom. See [Testing](./integrations/testing.md).
 
 **What formats (micro frontend frameworks) are supported?**
 

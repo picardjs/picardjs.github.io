@@ -66,3 +66,13 @@ const picard = initializePicard({
     }).then(res => res.json()),
 });
 ```
+
+::: info
+Relative URLs in a feed that is given as an object or a function are resolved against the page. Only a feed given as a URL is used as the base for the URLs it contains.
+:::
+
+## Using It with a Framework
+
+Start Picard.js once, e.g., in the entry module, and use the `pi-component` elements in your templates. Most frameworks only need to be told that `pi-*` are custom elements. See [Single-Page Apps](../integrations/spa.md) for Angular, React, Vue, Svelte, and Solid, and for coexisting with a Module Federation host.
+
+:point_right: See the [Angular](https://github.com/picardjs/samples/tree/main/angular/spa), [React](https://github.com/picardjs/samples/tree/main/react/spa), [Svelte](https://github.com/picardjs/samples/tree/main/svelte/spa), and [Vue](https://github.com/picardjs/samples/tree/main/vue/spa) samples.

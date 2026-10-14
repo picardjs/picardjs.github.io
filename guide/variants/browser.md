@@ -16,6 +16,8 @@ If you want to link to your own version of the script then download / install th
 You should also copy the other files from the `dist/browser` directory, too. This way you ensure that other optional libraries, debug tools, and source maps can be properly loaded and used.
 :::
 
+The script can also be loaded with `defer` or `async`.
+
 ## Configuration
 
 There are two ways to configure it:
@@ -70,3 +72,17 @@ Always just take the state as it was exported via `JSON.stringify(picard.readSta
 :::
 
 Ideally, you don't use this thing directly, but rely on Picard.js doing it implicitly, e.g., when using SSR with an islands architecture model.
+
+### Other Options
+
+All other options of the [client variant](./client.md) can be set via a `config` property on the script element, e.g., in its `onload` handler. See [Initialization Options](../../api/configuration/options.md#browser).
+
+## Without Inline Scripts
+
+The `feed` attribute makes it possible to use Picard.js without any inline script, e.g., under a strict Content Security Policy. A browser extension can even ship the script and a local `feed.json`:
+
+```html
+<script src="picard/picard.js" feed="feed.json"></script>
+```
+
+:point_right: See the [Electron](https://github.com/picardjs/samples/tree/main/electron/client) and [browser extension](https://github.com/picardjs/samples/tree/main/extension/mv3) samples.

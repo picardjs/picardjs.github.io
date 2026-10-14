@@ -10,6 +10,18 @@ Follow the JSON schema defined in the linked [GitHub repository](https://github.
 
 The returned response has either to be an object with a property named `microFrontends`, which is an object again - consisting of a mapping of names of micro frontends to their different definitions (i.e., one or more definitions per version).
 
+## Format Detection
+
+The format of each entry is determined in this order:
+
+1. `extras.pilet.spec` set to `mf` means Module Federation, and `nf` means Native Federation. The Piral Cloud Feed Service uses this form.
+2. Any other `extras.pilet` section means a pilet.
+3. A `url` ending with `.js`, or an `extras.modulefederation` section, means Module Federation.
+4. A `url` ending with `.json`, or an `extras.nativefederation` section, means Native Federation.
+5. Otherwise, Module Federation is assumed.
+
+Relative URLs are resolved against the URL of the discovery service. If the response is passed in as an object or returned from a function, they're resolved against the page.
+
 ## Mapping of Properties
 
 ### Module Federation

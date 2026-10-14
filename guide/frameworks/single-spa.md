@@ -42,4 +42,4 @@ Now you can use this single-spa component in a `pi-component` as follows:
 ></pi-component>
 ```
 
-This will only work in the client, as single-spa does not define any functions that could be used for server-side rendering.
+This will only work in the client, as single-spa does not define any functions that could be used for server-side rendering. In server-rendered pages, mark such components with `server="none"`.

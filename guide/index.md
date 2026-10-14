@@ -41,4 +41,9 @@ Since Picard.js only exposes web components you can always safely write them in 
 
 That's it for the basics :tada:!
 
-Let's go into more details.
+## Next Steps
+
+- **Using a framework or bundler?** Install `picard-js` and follow [Single-Page Apps](./integrations/spa.md).
+- **Rendering on the server or at build time?** See [Server-Side Rendering](./integrations/ssr.md). It covers Next.js, Nuxt, SvelteKit, Angular, Astro, and backends in other languages.
+- **Building a desktop or mobile app, or a browser extension?** See [Desktop & Mobile Apps](./integrations/apps.md).
+- **Want to see working code?** Browse the [samples](./samples.md). There's one for almost every major framework and runtime.

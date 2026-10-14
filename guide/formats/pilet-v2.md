@@ -21,3 +21,9 @@ Pilets can be used either as part of a discovery service response or directly by
 Required:
 
 - `format` has to be set to `pilet`
+
+## Server-Side Rendering
+
+Pilets are evaluated with Picard's own `System.register` runtime, on the client and on the server. A component of a pilet can be rendered on the server if it provides a `stringify` function.
+
+:point_right: The [`pi-ssr-html`](https://github.com/picardjs/samples/tree/main/shared/pi-ssr-html) pilet of the samples is a minimal, framework-less pilet with a server-renderable component.

@@ -44,4 +44,4 @@ Because a library is lightweight and does not stand in your way. Of course, you 
 
 ## How is Picard.js Different from X?
 
-You can check out the [Comparisons](./comparisons.md) section for more details on how Vite differs from other similar tools.
+You can check out the [Comparisons](./comparisons.md) section for more details on how Picard.js differs from other similar tools.

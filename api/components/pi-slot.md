@@ -9,6 +9,7 @@
 | `rel`                  | (1)   | The behavior of the slot                                         |
 | `item-template-id`     |       | The ID of a template to wrap each found component                |
 | `fallback-template-id` |       | The ID of a template to display as fallback                      |
+| `loading-template-id`  |       | The ID of a template to display while loading                    |
 | `order-by`             | (2)   | Defines the ordering of the found components                     |
 | `reverse-order`        |       | If set, reverses the order in which the components are displayed |
 

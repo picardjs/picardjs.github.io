@@ -48,7 +48,7 @@ Let's create an example lifecycle for some React component referred to `Componen
 
 ```js
 import React from 'react';
-import { createRoot } from 'react-dom/client';
+import { createRoot, hydrateRoot } from 'react-dom/client';
 import { renderToString } from 'react-dom/server';
 import Component from './Component';
 
@@ -66,10 +66,25 @@ const component = {
   },
   async unload() {},
   async bootstrap() {},
-  async stringify() {
+  async stringify(props) {
     return renderToString(<Component {...props} />);
   },
 };
 ```
+
+To *hydrate* the server-rendered markup instead of rendering it again, check `locals.hydrate` in `mount`:
+
+```js
+mount(container, props, locals) {
+  if (locals.hydrate) {
+    locals.root = hydrateRoot(container, <Component {...props} />);
+  } else {
+    locals.root = createRoot(container);
+    locals.root.render(<Component {...props} />);
+  }
+},
+```
+
+:point_right: The [`pi-ssr-html`](https://github.com/picardjs/samples/tree/main/shared/pi-ssr-html) and [`nf-ssr-html`](https://github.com/picardjs/samples/tree/main/shared/nf-ssr-html) micro frontends of the samples implement this lifecycle without a framework, including `update`.
 
 In this example the `load`, `unload`, and `bootstrap` functions remain unused. In general you might want to use them to start (or end) some loading process that is relevant for the given component.

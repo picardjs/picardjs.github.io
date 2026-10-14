@@ -62,3 +62,16 @@ Required:
 
 - `format` has to be set to `module`
 - `remote-name` has to be left unspecified
+
+## Coexisting with a Module Federation Host
+
+An application that is itself a Module Federation host (e.g., built with webpack, rspack, or Rsbuild) can use Picard.js, too. Picard.js uses its own instance of the Module Federation runtime, but it initializes containers with the share scope of the page's runtime:
+
+- a remote used by the host and by Picard.js is loaded only once,
+- the shared dependencies of the host and of the micro frontends are negotiated together.
+
+:point_right: See the [Rsbuild sample](https://github.com/picardjs/samples/tree/main/rsbuild/mf), where the host and Picard.js render the same remote.
+
+::: info
+Older containers register their modules without the `./` prefix (e.g., `column` instead of `./column`). Picard.js handles both. A host using such a container might need a runtime plugin, as shown in the sample.
+:::

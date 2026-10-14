@@ -48,6 +48,10 @@ There are two primary ways to interact with the router:
 
 In the second case clicking such anchor tags will be intercepted and the usual (full page) navigation will be aborted. Instead, the HTML5 history API is called and the scroll is reset (i.e., `window.scrollTo(0, 0)` is called).
 
+::: info
+Links are only intercepted while a `pi-slot` with `rel="router"` is on the page. On pages without client-side routing (e.g., multi-page sites, or sites using [Turbo](https://github.com/picardjs/samples/tree/main/turbo/ssr) or a framework router), the browser or the respective library handles the navigation. Clicks with a modifier key, on links with a `download` attribute, or with a `target` other than `_self` are never intercepted.
+:::
+
 ## Route Parameters
 
 The register page path can also consider route parameters. As an example, if you want to receive the value of a parameter `id`, which should be the ID of a product, then a route definition such as `/product/:id` would be suitable:

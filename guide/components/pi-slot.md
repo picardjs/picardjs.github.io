@@ -73,3 +73,15 @@ The resulting HTML is:
   </div>
 </template>
 ```
+
+## Loading and Fallback Content
+
+Like `pi-component`, a slot supports `loading-template-id` and `fallback-template-id`. The fallback is shown when no component matches the name.
+
+## Ordering
+
+When several micro frontends contribute to a slot, use `order-by` (`cid`, `origin`, `time`, or `none`) and `reverse-order` to control the order. See the [API](../../api/components/pi-slot.md).
+
+## Pages
+
+With `rel="router"`, a slot shows the page component (`page:/path`) matching the current URL. See [Client-Side Routing](../../api/usage/routing.md).

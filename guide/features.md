@@ -6,9 +6,9 @@ Picard.js is your comprehensive solution for orchestrating micro frontends, prov
 
 ![Multi Platform](../images/multi-platform.svg)
 
-Picard.js is designed to be versatile and adaptable across various environments. Whether you're working in a browser, Node.js, Deno, or Electron, Picard.js seamlessly orchestrates micro frontends, ensuring consistent performance and compatibility.
+Picard.js is designed to be versatile and adaptable across various environments. Whether you're working in a browser, Node.js, Bun, Deno, Electron, Tauri, or Capacitor, Picard.js seamlessly orchestrates micro frontends, ensuring consistent performance and compatibility.
 
-:point_right: Want to see this in action? [Example online](https://github.com/picardjs/picard/blob/develop/examples/08-ssr-tractor/package.json)
+:point_right: Want to see this in action? [Example online](https://github.com/picardjs/picard/blob/develop/examples/08-ssr-tractor/package.json) or [the samples](./samples.md) for many frameworks and runtimes
 
 ## Multi Format
 
@@ -50,6 +50,6 @@ Debugging with Picard.js is straightforward and integrates seamlessly into your 
 
 ![Islands Architecture](../images/islands-architecture.svg)
 
-Picard.js facilitates the creation of island architectures, enabling server-side rendered (SSR) applications that can hydrate and continue on the client side. This approach optimizes performance and user experience, combining the best of SSR and client-side rendering.
+Picard.js facilitates the creation of island architectures, enabling server-side rendered (SSR) applications that can hydrate and continue on the client side. This approach optimizes performance and user experience, combining the best of SSR and client-side rendering. It works with streaming (e.g., React Suspense), partial page updates (e.g., htmx or Turbo), and static site generators. See [Server-Side Rendering](./integrations/ssr.md).
 
 :point_right: Want to see this in action? [Example online](https://github.com/picardjs/picard/blob/develop/examples/09-islands-netflix/package.json)
