@@ -1,0 +1,105 @@
+# Picard.js
+
+> Picard.js (npm: `picard-js`) is a framework-agnostic micro frontend orchestrator. It loads micro frontends (pilets, Module Federation, Native Federation) from a discovery service ("feed") or from URLs, and mounts their components into custom elements (`pi-component`, `pi-slot`). It runs in the browser, and on the server (Node.js, Bun, Deno) for SSR/SSG with an islands architecture.
+
+Picard.js is in early preview (0.3.x pre-releases). Prefer the latest `picard-js` 0.3.0 pre-release; APIs below refer to it.
+
+## Essentials for writing code with Picard.js
+
+Pick the variant by environment:
+
+- Website without a bundler: `<script src="https://unpkg.com/picard-js" feed="FEED_URL"></script>`. It starts automatically; configure it via attributes (`feed`), or a `config` property set in the script's `onload` handler.
+- Bundled app (SPA, Electron, Tauri, Capacitor): `import { initializePicard } from 'picard-js/client'; initializePicard({ feed: 'FEED_URL' });`. Call it once at startup, e.g., next to bootstrapping the framework.
+- Server or build time: `import { initializePicard, getIslandsFile, getIslandsFileNames } from 'picard-js/node';`
+- Don't use `picard-js/client` with Metro (React Native). Use the browser script in a WebView instead.
+
+Render a component of a micro frontend listed in the feed:
+
+```html
+<pi-component name="counter" source="pi-simple-html" data='{"start":5}'></pi-component>
+```
+
+- `name` is the exposed component, `source` is the micro frontend's name in the feed (or a URL together with `format="module|native|pilet"`; Module Federation v1 also needs `remote-name`, plus `remote-type="esm"` for ES module remotes).
+- `data` is JSON. The `data` property accepts an object or a JSON string. Changing it calls the component's `update` lifecycle, not a re-mount.
+- `fallback-template-id` / `loading-template-id` reference `<template>` elements.
+- `client="load|idle|visible|none"` controls when a component is resumed in the browser. `server="none"` skips server rendering.
+- `<pi-slot name="x">` renders all components named `x` from all micro frontends. `<pi-slot rel="router">` shows `page:/path` components for the current URL; links are only intercepted while such a slot exists.
+
+Framework integration (the elements must be accepted as custom elements):
+
+- Angular: `schemas: [CUSTOM_ELEMENTS_SCHEMA]` on the component.
+- Vue/Nuxt: `compilerOptions.isCustomElement: (tag) => tag.startsWith('pi-')`.
+- React/Next/React Router: works at runtime; declare `pi-component` in `JSX.IntrinsicElements` for TypeScript.
+- Svelte/SvelteKit: no config; pass JSON as an expression, `data={'{"start":5}'}`.
+- Solid: declare the elements for JSX; signals can be bound to `data`.
+- Never let a framework render or diff the content *inside* a `pi-component`; Picard.js owns it. Insert server-rendered markup with `dangerouslySetInnerHTML` (or equivalent) in a `display: contents` wrapper.
+
+Server-side rendering (islands):
+
+```ts
+const picard = initializePicard({ feed: 'FEED_URL', interactive: true, scriptUrl: '/picard/picard.js' });
+const html = await picard.decorate(pageHtml); // renders pi-component/pi-slot, replaces pi-part
+// serve the islands script: GET /picard/:file -> getIslandsFile(file) as text/javascript (404 if undefined)
+// static sites: write every getIslandsFileNames() file next to the pages
+```
+
+- Put `<pi-part name="style"></pi-part>` in the head and `<pi-part name="script"></pi-part>` at the end of the body. The script part needs `interactive: true`.
+- Decorate the whole response in a middleware or hook (Express, Angular `server.ts`, Nuxt Nitro `render:response` + `render:html`, SvelteKit `transformPageChunk` collecting chunks until `done`, SolidStart middleware, Astro middleware). Drop the `content-length` header when replacing the body.
+- With streaming React (Next.js App Router, React Router), decorate single `pi-component` strings in async Server Components or non-awaited loader promises inside `Suspense`. Decorate the parts the same way, and put the style part in the body.
+- Keep `picard-js` external to server bundles (Next.js: `serverExternalPackages: ['picard-js']`).
+- Non-JS backends (.NET, Python, PHP) and SSGs (Hugo): run a small Node.js decorator service (`POST /decorate`) or a build step that decorates HTML files.
+- Native Federation (ES modules) on the server needs `node --experimental-vm-modules`. Bun and Deno work without a flag.
+- Server-rendered components get a `hydrate` attribute, and their `mount` receives `locals.hydrate === true`.
+
+Writing a component (Picard.js lifecycle; all functions optional):
+
+```js
+export const counter = {
+  stringify(props) { return `<button>Count: ${props.start}</button>`; }, // server
+  mount(container, props, locals) { if (!locals.hydrate) container.innerHTML = '...'; /* attach listeners */ },
+  update(props, locals) {},
+  unmount(container, locals) {},
+};
+```
+
+Other frameworks: `framework="single-spa"` (client only), `framework="web-component"` (client only), `framework="html"` (string; client and server).
+
+Feeds: a URL, a Piral Feed Service response (`{ items: [...] }`), an MFEWG discovery response (`{ microFrontends: {...} }`, with `extras.pilet.spec` = `mf`/`nf`/`v2`), a Native Federation manifest (`{ name: url }`), or a function returning a promise of one of those. Relative URLs resolve against the feed URL, or against the page for object/function feeds.
+
+Customization: the `services` option overrides any built-in service (e.g., `esm`, `platform`, `framework.{type}`, `format.{name}`, `slotRel.{name}`, `part.{name}`), which is the way to adapt Picard.js to unusual environments such as unit tests.
+
+Common pitfalls:
+
+- Micro frontends from another origin need CORS headers. A CSP must allow their origins and `blob:` scripts (used for ES modules with shared dependencies).
+- jsdom/happy-dom: enable script execution, copy `System` to jsdom's window, and replace the `esm` service (no `blob:` scripts, no `http:` imports in Node.js).
+- A Module Federation host (webpack/rspack/Rsbuild) and Picard.js share remotes and the share scope; nothing extra is needed.
+
+## Guide
+
+- [Getting Started](https://picard.js.org/guide/): drop-in script and first `pi-component`
+- [Samples](https://picard.js.org/guide/samples): working samples for Angular, React, Vue, Svelte, Next.js, Nuxt, SvelteKit, React Router, SolidStart, Qwik, Astro, Hugo, Turbo, htmx, ASP.NET Core, Bun, Deno, Electron, Tauri, Capacitor, React Native, browser extensions, and Vitest
+- [Single-Page Apps](https://picard.js.org/guide/integrations/spa): framework notes, passing data, Module Federation hosts
+- [Server-Side Rendering](https://picard.js.org/guide/integrations/ssr): decorate, parts, islands script, integration patterns per framework, streaming, runtimes
+- [Desktop & Mobile Apps](https://picard.js.org/guide/integrations/apps): origins, CSP, bundled micro frontends, browser extensions, React Native
+- [Testing](https://picard.js.org/guide/integrations/testing): Vitest with jsdom and happy-dom
+- [pi-component](https://picard.js.org/guide/components/pi-component), [pi-slot](https://picard.js.org/guide/components/pi-slot), [pi-part](https://picard.js.org/guide/components/pi-part): the web components
+- [Variants](https://picard.js.org/guide/variants/): browser, client, node, islands, native
+- [Formats](https://picard.js.org/guide/formats/): Module Federation, Native Federation, pilets
+- [Frameworks](https://picard.js.org/guide/frameworks/): default lifecycle, HTML, single-spa, web components
+
+## API
+
+- [pi-component API](https://picard.js.org/api/components/pi-component): attributes, properties, events
+- [pi-slot API](https://picard.js.org/api/components/pi-slot): attributes incl. ordering and `rel`
+- [Initialization Options](https://picard.js.org/api/configuration/options): `initializePicard` options per variant, store, decorator, islands file functions
+- [Runtime Services](https://picard.js.org/api/configuration/services): extending and replacing services
+- [Lifecycle](https://picard.js.org/api/lifecycle/): component lifecycle reference
+- [Routing](https://picard.js.org/api/usage/routing): `pi-slot rel="router"`, route parameters
+- [Discovery Schema](https://picard.js.org/api/discovery/discovery-schema): format detection for MFEWG responses
+
+## Optional
+
+- [Source code](https://github.com/picardjs/picard): repository, examples, changelog
+- [Samples repository](https://github.com/picardjs/samples): one README per sample explaining the integration
+- [Why Picard.js?](https://picard.js.org/guide/why) and [Comparisons](https://picard.js.org/guide/comparisons): positioning against Piral, single-spa, Module Federation
+- [FAQ](https://picard.js.org/guide/faq)
