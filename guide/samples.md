@@ -31,6 +31,7 @@ Looking for a starting point? Pick the sample closest to your stack, then read t
 | [React Router](https://github.com/picardjs/samples/tree/main/react-router/ssr) | React Router 8 | loaders return `decorate` promises, rendered with `Await` (streaming) |
 | [SolidStart](https://github.com/picardjs/samples/tree/main/solid/ssr) | SolidStart 2 | a middleware; a signal bound to `data` |
 | [SvelteKit](https://github.com/picardjs/samples/tree/main/sveltekit/ssr) | SvelteKit 3 | `transformPageChunk` in `hooks.server.ts` |
+| [TanStack Start](https://github.com/picardjs/samples/tree/main/tanstack/ssr) | TanStack Start 1 | server functions called by isomorphic loaders, rendered with `Await` (streaming) |
 
 ## Rendering at Build Time
 

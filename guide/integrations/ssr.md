@@ -114,6 +114,7 @@ With streaming frameworks, render each micro frontend separately: decorate a sin
 | --------- | -------- | ------ |
 | Next.js (App Router) | an async Server Component awaiting `picard.decorate(...)` | [next/ssr](https://github.com/picardjs/samples/tree/main/next/ssr) |
 | React Router (framework mode) | loaders return `picard.decorate(...)` without awaiting it, rendered with `Await` | [react-router/ssr](https://github.com/picardjs/samples/tree/main/react-router/ssr) |
+| TanStack Start | loaders call a server function (`createServerFn`) and return its promise, rendered with `Await` | [tanstack/ssr](https://github.com/picardjs/samples/tree/main/tanstack/ssr) |
 | Qwik City | a `server$` function called from a task | [qwik/ssg](https://github.com/picardjs/samples/tree/main/qwik/ssg) |
 
 ```tsx
@@ -129,6 +130,12 @@ export async function PicardComponent({ name, source, data }) {
 Escape the attribute values, as the samples do. The `pi-part` elements are decorated the same way, e.g., `picard.decorate('<pi-part name="script"></pi-part>')` at the end of the body. Streamed content can't go into the head, so place the style part at the start of the body.
 
 React moves streamed `Suspense` content from a hidden container into place. Picard.js keeps a resumed component when its element is moved, so nothing is rendered twice.
+
+Render *every* `pi-component` this way, including the client-only ones (`server="none"`). If React rendered the element itself, the islands script could fill it before React hydrates, and React would fail the hydration and re-render the page. `suppressHydrationWarning` on the wrapper silences React's development warning about the changed inner HTML.
+
+::: warning
+Server functions and RPC endpoints (e.g., TanStack Start's `createServerFn`, Qwik's `server$`) can be called by anyone. Accept a component *reference* (name, source, data) and build the markup on the server, never raw HTML. A `pi-component` with a URL `source` and a `format` would make the server load and run code from that URL. Without `format`, Picard.js only loads micro frontends from the feed.
+:::
 
 ### Decorating Outside of JavaScript
 

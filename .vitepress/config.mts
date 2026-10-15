@@ -11,6 +11,11 @@ export default defineConfig({
   head: [
     ["link", { rel: "icon", type: "image/png", href: "/picard-logo-mini.png" }],
     ["meta", { name: "theme-color", content: "#5f67ee" }],
+    // guidance for AI assistants (see /guide/ai-assistants)
+    [
+      "link",
+      { rel: "alternate", type: "text/plain", href: "/llms.txt", title: "llms.txt" },
+    ],
     ["meta", { property: "og:type", content: "website" }],
     ["meta", { property: "og:locale", content: "en" }],
     [
@@ -42,7 +47,8 @@ export default defineConfig({
     logo: { src: "/picard-logo-mini.png", width: 24, height: 24 },
 
     footer: {
-      message: "Released under the MIT License.",
+      message:
+        'Released under the MIT License. Using an AI assistant? Point it to <a href="/llms.txt" target="_blank">llms.txt</a>.',
       copyright: "Copyright © 2024-present smapiot GmbH",
     },
 
@@ -55,6 +61,11 @@ export default defineConfig({
           {
             text: "Changelog",
             link: "https://github.com/picardjs/picard/blob/main/CHANGELOG.md",
+          },
+          {
+            text: "llms.txt",
+            link: "/llms.txt",
+            target: "_blank",
           },
           {
             text: "Contributing",
@@ -74,6 +85,7 @@ export default defineConfig({
             { text: "Features", link: "/guide/features" },
             { text: "Comparisons", link: "/guide/comparisons" },
             { text: "Samples", link: "/guide/samples" },
+            { text: "AI Assistants", link: "/guide/ai-assistants" },
             { text: "FAQ", link: "/guide/faq" },
           ],
         },

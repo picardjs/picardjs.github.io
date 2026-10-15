@@ -47,3 +47,4 @@ That's it for the basics :tada:!
 - **Rendering on the server or at build time?** See [Server-Side Rendering](./integrations/ssr.md). It covers Next.js, Nuxt, SvelteKit, Angular, Astro, and backends in other languages.
 - **Building a desktop or mobile app, or a browser extension?** See [Desktop & Mobile Apps](./integrations/apps.md).
 - **Want to see working code?** Browse the [samples](./samples.md). There's one for almost every major framework and runtime.
+- **Working with an AI assistant?** Give it [llms.txt](/llms.txt), a compact guide to using Picard.js correctly. See [AI Assistants](./ai-assistants.md).
