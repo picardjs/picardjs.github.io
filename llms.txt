@@ -45,7 +45,9 @@ const html = await picard.decorate(pageHtml); // renders pi-component/pi-slot, r
 
 - Put `<pi-part name="style"></pi-part>` in the head and `<pi-part name="script"></pi-part>` at the end of the body. The script part needs `interactive: true`.
 - Decorate the whole response in a middleware or hook (Express, Angular `server.ts`, Nuxt Nitro `render:response` + `render:html`, SvelteKit `transformPageChunk` collecting chunks until `done`, SolidStart middleware, Astro middleware). Drop the `content-length` header when replacing the body.
-- With streaming React (Next.js App Router, React Router), decorate single `pi-component` strings in async Server Components or non-awaited loader promises inside `Suspense`. Decorate the parts the same way, and put the style part in the body.
+- With streaming React (Next.js App Router, React Router, TanStack Start), decorate single `pi-component` strings in async Server Components or non-awaited loader promises inside `Suspense`. Decorate the parts the same way, and put the style part in the body.
+- Render *every* `pi-component` in React via `dangerouslySetInnerHTML` (with `suppressHydrationWarning`), including client-only ones. A `pi-component` rendered as JSX can be filled by the islands script before hydration, which fails React's hydration.
+- TanStack Start loaders are isomorphic: call Picard.js only inside a `createServerFn` handler. Server functions/RPC endpoints are public, so accept a validated component reference (name, source, data; no `format`, no URLs), never raw HTML.
 - Keep `picard-js` external to server bundles (Next.js: `serverExternalPackages: ['picard-js']`).
 - Non-JS backends (.NET, Python, PHP) and SSGs (Hugo): run a small Node.js decorator service (`POST /decorate`) or a build step that decorates HTML files.
 - Native Federation (ES modules) on the server needs `node --experimental-vm-modules`. Bun and Deno work without a flag.
@@ -77,7 +79,7 @@ Common pitfalls:
 ## Guide
 
 - [Getting Started](https://picard.js.org/guide/): drop-in script and first `pi-component`
-- [Samples](https://picard.js.org/guide/samples): working samples for Angular, React, Vue, Svelte, Next.js, Nuxt, SvelteKit, React Router, SolidStart, Qwik, Astro, Hugo, Turbo, htmx, ASP.NET Core, Bun, Deno, Electron, Tauri, Capacitor, React Native, browser extensions, and Vitest
+- [Samples](https://picard.js.org/guide/samples): working samples for Angular, React, Vue, Svelte, Next.js, Nuxt, SvelteKit, React Router, TanStack Start, SolidStart, Qwik, Astro, Hugo, Turbo, htmx, ASP.NET Core, Bun, Deno, Electron, Tauri, Capacitor, React Native, browser extensions, and Vitest
 - [Single-Page Apps](https://picard.js.org/guide/integrations/spa): framework notes, passing data, Module Federation hosts
 - [Server-Side Rendering](https://picard.js.org/guide/integrations/ssr): decorate, parts, islands script, integration patterns per framework, streaming, runtimes
 - [Desktop & Mobile Apps](https://picard.js.org/guide/integrations/apps): origins, CSP, bundled micro frontends, browser extensions, React Native
